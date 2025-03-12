@@ -37,6 +37,29 @@ class TapelController extends Controller
         return view('admin.tapel.index');
     }
 
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required|min:1',
+            'semester' => 'required|in:Ganjil,Genap'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'  => 'error',
+                'errors'  => $validator->errors(),
+                'message' => 'Maaf, inputan yang Anda masukkan salah. Silakan periksa kembali dan coba lagi.',
+            ], 422);
+        }
+
+        Tapel::create($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data berhasil disimpan'
+        ], 201);
+    }
+
     public function show($id)
     {
         $data = Tapel::findOrfail($id);

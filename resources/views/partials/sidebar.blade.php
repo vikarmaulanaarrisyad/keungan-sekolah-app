@@ -64,9 +64,9 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="pages/search/enhanced.html" class="nav-link">
+                                <a href="{{ route('kelas.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Enhanced</p>
+                                    <p>Kelas</p>
                                 </a>
                             </li>
                         </ul>
