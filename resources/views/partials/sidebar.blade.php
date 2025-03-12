@@ -47,6 +47,30 @@
                     </a>
                 </li>
                 @if (Auth::user()->hasRole('admin'))
+                    <li class="nav-header">MASTER DATA</li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-cogs"></i>
+                            <p>
+                                Master Data
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <li class="nav-item">
+                                <a href="{{ route('tapel.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Tahun Pelajaran</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/search/enhanced.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Enhanced</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 @endif
             </ul>
         </nav>
