@@ -18,9 +18,11 @@ return new class extends Migration
             $table->string('nip_guru');
             $table->string('gelar_depan')->nullable();
             $table->string('gelar_belakang')->nullable();
+            $table->enum('jenis_kelamin', ['L', 'P']);
             $table->string('tempat_lahir')->nullable();
             $table->date('tanggal_lahir')->nullable();
-            $table->boolean('status');
+            $table->boolean('status')->default(1);
+            $table->string('foto')->default('foto.jpg');
             $table->timestamps();
         });
     }

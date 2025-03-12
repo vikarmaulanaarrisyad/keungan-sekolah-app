@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\GuruController;
 use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\TapelController;
 use App\Http\Controllers\DashboardController;
@@ -21,5 +22,9 @@ Route::group(['middleware' => 'auth'], function () {
         // Kelas
         Route::get('/kelas/data', [KelasController::class, 'data'])->name('kelas.data');
         Route::resource('/kelas', KelasController::class)->except('create', 'edit');
+
+        // Guru
+        Route::get('/guru/data', [GuruController::class, 'data'])->name('guru.data');
+        Route::resource('/guru', GuruController::class);
     });
 });
