@@ -42,6 +42,7 @@ return new class extends Migration
             $table->integer('tinggi_badan')->default(0);
             $table->integer('lingkar_kepala')->default(0);
             $table->bigInteger('saldo')->default(0);
+            $table->string('foto')->default('default.jpg');
             $table->timestamps();
         });
     }
