@@ -9,6 +9,7 @@ use App\Models\Rombel;
 use App\Models\Siswa;
 use App\Models\Tapel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class RombelController extends Controller
@@ -145,57 +146,29 @@ class RombelController extends Controller
     public function getDataSiswa(Request $request)
     {
         // Dapatkan rombel dari request
-        $rombel = Rombel::findOrFail($request->rombel_id);
+        $rombel = Rombel::find($request->rombel_id);
+
+        if (!$rombel) {
+            return response()->json(['success' => false, 'message' => 'Rombel tidak ditemukan.']);
+        }
+
         // Cek apakah tahun pelajaran aktif tersedia
         $tahunPelajaran = Tapel::aktif()->first();
         if (!$tahunPelajaran) {
             return response()->json(['success' => false, 'message' => 'Tahun pelajaran aktif tidak ditemukan.']);
         }
 
-        $tahunPelajaranId = $tahunPelajaran->id;
-        $semester = $tahunPelajaran->semester;
         $kelasId = $rombel->kelas->id;
 
-        if ($semester == 'Ganjil') {
-            // Ambil siswa yang belum memiliki entri di rombel_siswa untuk tahun pelajaran tertentu
-            $siswa = Siswa::where('kelas_id', $kelasId)
-                ->whereDoesntHave('rombel_siswa', function ($query) use ($tahunPelajaranId) {
-                    $query->where('rombel_siswa.tapel_id', $tahunPelajaranId); // Tambahkan alias tabel
-                })
-                ->get();
-        } else {
-            // Jika semester Genap, cari tahun pelajaran sebelumnya yang semester-nya Ganjil
-            $tahunPelajaranSebelumnya = Tapel::where('id', '<', $tahunPelajaranId)
-                ->where('semester', 'Ganjil')
-                ->orderBy('id', 'desc')
-                ->first();
+        // Ambil siswa yang sudah terdaftar di sembarang rombel pada tahun pelajaran aktif
+        $siswaTerdaftarIds = DB::table('rombel_siswas')
+            ->pluck('siswa_id')
+            ->toArray();
 
-            if (!$tahunPelajaranSebelumnya) {
-                // Jika ini adalah tahun pelajaran pertama, hanya ambil siswa baru yang belum masuk rombel_siswa
-                $siswa = Siswa::where('kelas_id', $kelasId)
-                    ->whereDoesntHave('rombel_siswa', function ($query) use ($tahunPelajaranId) {
-                        $query->where('rombel_siswa.tapel_id', $tahunPelajaranId);
-                    })
-                    ->get();
-            } else {
-                $tahunPelajaranSebelumnyaId = $tahunPelajaranSebelumnya->id;
-
-                // Ambil siswa yang sudah terdaftar di semester Ganjil tahun pelajaran sebelumnya
-                $siswaTerdaftar = Siswa::where('kelas_id', $kelasId)
-                    ->whereHas('rombel_siswa', function ($query) use ($tahunPelajaranSebelumnyaId) {
-                        $query->where('rombel_siswa.tapel_id', $tahunPelajaranSebelumnyaId);
-                    });
-
-                // Ambil siswa baru yang belum memiliki entri di rombel_siswa untuk tahun pelajaran saat ini
-                $siswaBaru = Siswa::where('kelas_id', $kelasId)
-                    ->whereDoesntHave('rombel_siswa', function ($query) use ($tahunPelajaranId) {
-                        $query->where('rombel_siswa.tapel_id', $tahunPelajaranId);
-                    });
-
-                // Gabungkan hasil query siswa terdaftar dan siswa baru
-                $siswa = $siswaTerdaftar->union($siswaBaru)->get();
-            }
-        }
+        // Ambil siswa yang belum terdaftar di rombel mana pun pada tahun pelajaran aktif
+        $siswa = Siswa::where('kelas_id', $kelasId)
+            ->whereNotIn('id', $siswaTerdaftarIds) // Saring siswa yang sudah terdaftar
+            ->get();
 
         // Kembalikan data siswa dalam format DataTables
         return datatables($siswa)
@@ -206,6 +179,7 @@ class RombelController extends Controller
             ->escapeColumns([])
             ->make(true);
     }
+
 
     public function getSiswaRombel($id)
     {
@@ -225,6 +199,56 @@ class RombelController extends Controller
             ->skipPaging()
             ->rawColumns(['aksi']) // Pastikan HTML tidak di-escape
             ->make(true);
+    }
+
+    public function addSiswa(Request $request)
+    {
+        // Validasi request
+        $validated = $request->validate([
+            'rombel_id' => 'required|exists:rombels,id',
+            'siswa_ids' => 'required|array',
+        ]);
+
+        // Dapatkan tahun pelajaran aktif
+        $tahunPelajaran = Tapel::aktif()->first();
+        if (!$tahunPelajaran) {
+            return response()->json(['success' => false, 'message' => 'No active academic year found.']);
+        }
+
+        // Temukan rombel yang dipilih
+        $rombel = Rombel::findOrFail($validated['rombel_id']);
+
+        // Ambil siswa yang belum terdaftar dalam rombel ini
+        $existingSiswaIds = DB::table('rombel_siswas')
+            ->where('rombel_id', $rombel->id)
+            ->whereIn('siswa_id', $validated['siswa_ids'])
+            ->pluck('siswa_id')
+            ->toArray();
+
+        // Filter siswa yang belum ada
+        $newSiswaIds = array_diff($validated['siswa_ids'], $existingSiswaIds);
+
+        if (!empty($newSiswaIds)) {
+            // Tambahkan siswa ke rombel (gunakan syncWithoutDetaching agar tidak duplikat)
+            $rombel->rombel_siswa()->syncWithoutDetaching($newSiswaIds);
+
+            // Update kelas_id untuk siswa
+            Siswa::whereIn('id', $newSiswaIds)->update(['kelas_id' => $rombel->kelas->id]);
+
+            // Ambil data siswa yang baru ditambahkan
+            $siswa = Siswa::whereIn('id', $newSiswaIds)->get();
+
+            return response()->json([
+                'success' => true,
+                'siswa' => $siswa,
+                'message' => 'Siswa berhasil ditambahkan ke rombel.'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Tidak ada siswa yang ditambahkan karena sudah terdaftar.'
+        ]);
     }
 
     public function removeSiswa(Request $request)

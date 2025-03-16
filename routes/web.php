@@ -35,8 +35,11 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Rombel
         Route::get('/rombel/data', [RombelController::class, 'data'])->name('rombel.data');
-        Route::get('/rombel/{id}/detail', [RombelController::class, 'detail'])->name('rombel.detail');
-        Route::get('/rombel/{id}/siswa/data', [RombelController::class, 'getSiswaRombel'])->name('rombel.getSiswaRombel');
         Route::resource('/rombel', RombelController::class);
+        Route::get('/rombel/{id}/detail', [RombelController::class, 'detail'])->name('rombel.detail');
+        Route::get('/rombel/{rombel_id}/siswa', [RombelController::class, 'getDataSiswa'])->name('rombel.getDataSiswa');
+        Route::get('/rombel/{id}/siswa/data', [RombelController::class, 'getSiswaRombel'])->name('rombel.getSiswaRombel');
+        Route::post('/rombel/add-siswa', [RombelController::class, 'addSiswa'])->name('rombel.addSiswa');
+        Route::delete('/siswa/rombel/delete', [RombelController::class, 'removeSiswa'])->name('siswa.rombel.delete');
     });
 });
