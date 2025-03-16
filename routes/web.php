@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\GuruController;
 use App\Http\Controllers\Admin\KelasController;
+use App\Http\Controllers\Admin\RombelController;
 use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\Admin\TapelController;
 use App\Http\Controllers\DashboardController;
@@ -31,5 +32,11 @@ Route::group(['middleware' => 'auth'], function () {
         // Siswa
         Route::get('/siswa/data', [SiswaController::class, 'data'])->name('siswa.data');
         Route::resource('/siswa', SiswaController::class);
+
+        // Rombel
+        Route::get('/rombel/data', [RombelController::class, 'data'])->name('rombel.data');
+        Route::get('/rombel/{id}/detail', [RombelController::class, 'detail'])->name('rombel.detail');
+        Route::get('/rombel/{id}/siswa/data', [RombelController::class, 'getSiswaRombel'])->name('rombel.getSiswaRombel');
+        Route::resource('/rombel', RombelController::class);
     });
 });

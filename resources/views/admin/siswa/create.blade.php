@@ -183,7 +183,6 @@
                                 <input type="text" class="form-control" name="transportasi" id="transportasi">
                             </div>
                         </div>
-
                     </div>
                     <x-slot name="footer">
                         <button type="submit" class="btn btn-primary">Simpan</button>

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('rombels', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('tapel_id');
             $table->unsignedBigInteger('kelas_id');
             $table->unsignedBigInteger('guru_id');
             $table->string('nama_rombel');

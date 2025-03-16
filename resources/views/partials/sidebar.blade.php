@@ -81,6 +81,12 @@
                                     <p>Siswa</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('rombel.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Rombongan Belajar</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 @endif

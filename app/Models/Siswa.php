@@ -14,4 +14,9 @@ class Siswa extends Model
     {
         return $this->belongsTo(Kelas::class);
     }
+
+    public function rombel_siswa()
+    {
+        return $this->belongsToMany(Rombel::class, 'rombel_siswas', 'rombel_id', 'siswa_id');
+    }
 }
