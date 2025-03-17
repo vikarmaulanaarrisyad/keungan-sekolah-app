@@ -89,6 +89,103 @@
                             </li>
                         </ul>
                     </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('tabungan.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-money-bill-wave"></i>
+                            <p>
+                                Tabungan Siswa
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-header">TRANSAKSI</li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-cogs"></i>
+                            <p>
+                                Transaksi
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <!-- Menu Tabungan Siswa -->
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>
+                                        Tabungan Siswa
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview" style="display: none;">
+                                    <li class="nav-item">
+                                        <a href="{{ route('store-tabungan.index') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Setor Tabungan</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Tarik Tabungan</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <!-- Menu Pengelolaan Dana BOS -->
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>
+                                        Dana BOS
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview" style="display: none;">
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Pemasukan Dana BOS</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Pengeluaran Dana BOS</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-header">REPORT</li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-file-alt nav-icon"></i>
+                            <p>
+                                Cetak Laporan
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <li class="nav-item">
+                                <a href="" class="nav-link">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Laporan Tabungan</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="" class="nav-link">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Laporan Dana BOS</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 @endif
             </ul>
         </nav>

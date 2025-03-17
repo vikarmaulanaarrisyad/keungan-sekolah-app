@@ -266,4 +266,13 @@ class SiswaController extends Controller
             'message' => 'Data berhasil dihapus'
         ], 201);
     }
+
+    public function getByRombel($rombel_id)
+    {
+        $siswa = Siswa::whereHas('rombel_siswa', function ($q) use ($rombel_id) {
+            return $q->where('rombel_id', $rombel_id);
+        })->get();
+
+        return response()->json($siswa);
+    }
 }

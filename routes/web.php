@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\GuruController;
 use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\RombelController;
 use App\Http\Controllers\Admin\SiswaController;
+use App\Http\Controllers\Admin\StoreTabunganController;
+use App\Http\Controllers\Admin\TabunganController;
 use App\Http\Controllers\Admin\TapelController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +33,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Siswa
         Route::get('/siswa/data', [SiswaController::class, 'data'])->name('siswa.data');
+        Route::get('/get-siswa/{rombel_id}', [SiswaController::class, 'getByRombel'])->name('siswa.getByRombel');
         Route::resource('/siswa', SiswaController::class);
 
         // Rombel
@@ -41,5 +44,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/rombel/{id}/siswa/data', [RombelController::class, 'getSiswaRombel'])->name('rombel.getSiswaRombel');
         Route::post('/rombel/add-siswa', [RombelController::class, 'addSiswa'])->name('rombel.addSiswa');
         Route::delete('/siswa/rombel/delete', [RombelController::class, 'removeSiswa'])->name('siswa.rombel.delete');
+
+        // Tabungan
+        route::get('/tabungan/data', [TabunganController::class, 'data'])->name('tabungan.data');
+        Route::resource('/tabungan', TabunganController::class);
+
+        // Store Tabungan
+        Route::get('/transaksi/store-tabungan/data', [StoreTabunganController::class, 'data'])->name('store.tabungan.data');
+        Route::resource('/transaksi/store-tabungan', StoreTabunganController::class);
     });
 });
