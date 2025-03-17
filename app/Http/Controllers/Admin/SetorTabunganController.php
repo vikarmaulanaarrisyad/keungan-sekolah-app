@@ -29,6 +29,7 @@ class SetorTabunganController extends Controller
                     });
                 });
             })
+            ->where('type', 'setor')
             ->orderBy('id', 'DESC')
             ->get();
 

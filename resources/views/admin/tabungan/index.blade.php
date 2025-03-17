@@ -21,7 +21,7 @@
                                 <button onclick="setorTabungan(`{{ route('setor-tabungan.index') }}`)" type="button"
                                     class="btn btn-success btn-sm"><i class="fas fa-download"></i> Setor Tabungan</button>
 
-                                <button onclick="tarikTabungan(`{{ route('tabungan.create') }}`)"
+                                <button onclick="tarikTabungan(`{{ route('tarik-tabungan.index') }}`)"
                                     class="btn btn-sm btn-success">
                                     <i class="fas fa-upload"></i> Tarik Tabungan
                                 </button>
@@ -108,6 +108,18 @@
         })
 
         function setorTabungan(url) {
+            Swal.fire({
+                title: 'Mohon Tunggu',
+                text: 'Sedang memproses...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                    window.location.href = url;
+                }
+            });
+        }
+
+        function tarikTabungan(url) {
             Swal.fire({
                 title: 'Mohon Tunggu',
                 text: 'Sedang memproses...',

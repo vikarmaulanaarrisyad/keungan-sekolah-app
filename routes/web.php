@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\Admin\StoreTabunganController;
 use App\Http\Controllers\Admin\TabunganController;
 use App\Http\Controllers\Admin\TapelController;
+use App\Http\Controllers\Admin\TarikTabunganController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,8 +51,12 @@ Route::group(['middleware' => 'auth'], function () {
         route::get('/tabungan/data', [TabunganController::class, 'data'])->name('tabungan.data');
         Route::resource('/tabungan', TabunganController::class);
 
-        // Store Tabungan
+        // Setor Tabungan
         Route::get('/transaksi/setor-tabungan/data', [SetorTabunganController::class, 'data'])->name('setor.tabungan.data');
         Route::resource('/transaksi/setor-tabungan', SetorTabunganController::class);
+
+        // Tarik Tabungan
+        Route::get('/transaksi/tarik-tabungan/data', [TarikTabunganController::class, 'data'])->name('tarik.tabungan.data');
+        Route::resource('/transaksi/tarik-tabungan', TarikTabunganController::class);
     });
 });
