@@ -120,7 +120,7 @@
                                 </a>
                                 <ul class="nav nav-treeview" style="display: none;">
                                     <li class="nav-item">
-                                        <a href="{{ route('store-tabungan.index') }}" class="nav-link">
+                                        <a href="{{ route('setor-tabungan.index') }}" class="nav-link">
                                             <i class="far fa-dot-circle nav-icon"></i>
                                             <p>Setor Tabungan</p>
                                         </a>

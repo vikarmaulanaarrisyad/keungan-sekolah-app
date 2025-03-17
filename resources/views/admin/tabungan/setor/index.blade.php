@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Data Tabungan')
+@section('title', 'Transaksi Setor Tabungan')
 
-@section('subtitle', 'Data Tabungan')
+@section('subtitle', 'Transaksi Setor Tabungan')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
@@ -14,16 +14,24 @@
         <div class="col-lg-12">
             <x-card>
                 <x-slot name="header">
-                    <h3 class="card-title">Tabungan Siswa</h3>
+                    <h3 class="card-title">@yield('subtitle')</h3>
                     <div class="card-tools">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <button onclick="addForm(`{{ route('store-tabungan.store') }}`)" type="button"
-                                    class="btn btn-success btn-sm"><i class="fas fa-plus-circle"></i> Tambah Data</button>
+                        <div class="d-flex align-items-center gap-2"> <!-- Tambahkan gap antara elemen -->
+                            <div class="form-group mb-0 mr-3"> <!-- Hapus margin bawah agar sejajar -->
+                                <select id="filter-rombel" class="form-control form-control-sm">
+                                    <option value="">Semua Rombel</option>
+                                    @foreach ($rombels as $rombel)
+                                        <option value="{{ $rombel->id }}">{{ $rombel->kelas->nama_kelas }}
+                                            {{ $rombel->nama_rombel }}</option>
+                                    @endforeach
+                                </select>
                             </div>
+                            <button onclick="addForm(`{{ route('setor-tabungan.store') }}`)" type="button"
+                                class="btn btn-success btn-sm"><i class="fas fa-plus-circle"></i> Tambah Data</button>
                         </div>
                     </div>
                 </x-slot>
+
 
                 <x-table>
                     <x-slot name="thead">
@@ -40,7 +48,7 @@
             </x-card>
         </div>
     </div>
-    @include('admin.tabungan.store.form')
+    @include('admin.tabungan.setor.form')
 @endsection
 
 @include('includes.datatables')
@@ -52,12 +60,15 @@
         let button = '#submitBtn';
 
         table = $('.table').DataTable({
-            processing: false,
+            processing: true,
             serverSide: true,
             autoWidth: false,
             responsive: true,
             ajax: {
-                url: '{{ route('store.tabungan.data') }}'
+                url: '{{ route('setor.tabungan.data') }}',
+                data: function(d) {
+                    d.rombel_id = $('#filter-rombel').val(); // Kirim nilai rombel_id dari select filter
+                }
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -103,6 +114,11 @@
                 }
             ],
         })
+
+        // Event listener untuk filter rombel
+        $('#filter-rombel').change(function() {
+            table.ajax.reload(); // Reload data berdasarkan pilihan rombel
+        });
 
         function addForm(url, title = "Transaksi Setor Tabungan") {
             // Tampilkan loading dengan SweetAlert2

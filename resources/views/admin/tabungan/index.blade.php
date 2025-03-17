@@ -18,7 +18,7 @@
                     <div class="card-tools">
                         <div class="d-flex align-items-center">
                             <div>
-                                <button onclick="setorTabungan(`{{ route('store-tabungan.index') }}`)" type="button"
+                                <button onclick="setorTabungan(`{{ route('setor-tabungan.index') }}`)" type="button"
                                     class="btn btn-success btn-sm"><i class="fas fa-download"></i> Setor Tabungan</button>
 
                                 <button onclick="tarikTabungan(`{{ route('tabungan.create') }}`)"

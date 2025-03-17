@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\GuruController;
 use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\RombelController;
+use App\Http\Controllers\Admin\SetorTabunganController;
 use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\Admin\StoreTabunganController;
 use App\Http\Controllers\Admin\TabunganController;
@@ -50,7 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('/tabungan', TabunganController::class);
 
         // Store Tabungan
-        Route::get('/transaksi/store-tabungan/data', [StoreTabunganController::class, 'data'])->name('store.tabungan.data');
-        Route::resource('/transaksi/store-tabungan', StoreTabunganController::class);
+        Route::get('/transaksi/setor-tabungan/data', [SetorTabunganController::class, 'data'])->name('setor.tabungan.data');
+        Route::resource('/transaksi/setor-tabungan', SetorTabunganController::class);
     });
 });
