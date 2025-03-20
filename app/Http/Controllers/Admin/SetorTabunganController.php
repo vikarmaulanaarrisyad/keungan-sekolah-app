@@ -125,6 +125,69 @@ class SetorTabunganController extends Controller
 
     public function destroy($id)
     {
+        $tabungan = Tabungan::find($id);
+
+        if (!$tabungan) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data tidak ditemukan'
+            ], 404);
+        }
+
+        $siswa = $tabungan->siswa;
+
+        if ($siswa) {
+            // Hapus transaksi tabungan terlebih dahulu
+            $tabungan->delete();
+        }
+
+        // Ambil semua transaksi tabungan yang tersisa setelah penghapusan
+        $tabunganSisa = Tabungan::where('siswa_id', $tabungan->siswa_id)
+            ->orderBy('tanggal', 'asc')
+            ->orderBy('id', 'asc')
+            ->get();
+
+        // Cek apakah masih ada transaksi setelah penghapusan
+        if ($tabunganSisa->isEmpty()) {
+            $siswa->saldo = 0;
+            $siswa->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data berhasil dihapus dan saldo direset ke 0'
+            ], 200);
+        }
+
+        // Gunakan saldo dari transaksi pertama setelah penghapusan
+        $saldo = $tabunganSisa->first()->jumlah;
+        $tabunganSisa->first()->saldo_akhir = $saldo;
+        $tabunganSisa->first()->save();
+
+        // Hitung ulang saldo dari transaksi kedua ke depan
+        for ($i = 1; $i < $tabunganSisa->count(); $i++) {
+            $t = $tabunganSisa[$i];
+
+            $saldo += $t->jumlah;
+
+
+            $t->saldo_akhir = $saldo;
+            $t->save();
+        }
+
+        // Perbarui saldo siswa dengan saldo terakhir dari transaksi
+        $siswa->saldo = $saldo;
+        $siswa->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data berhasil dihapus dan saldo akhir diperbarui'
+        ], 200);
+    }
+
+
+
+    public function destroy1($id)
+    {
         $tabungan = Tabungan::find($id); // Gunakan find() untuk lebih ringkas
 
         if (!$tabungan) {

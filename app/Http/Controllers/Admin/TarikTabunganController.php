@@ -61,12 +61,12 @@ class TarikTabunganController extends Controller
             ->make(true);
     }
 
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'rombel_id' => 'required',
             'siswa_id' => 'required',
+            'keterangan' => 'required',
             'jumlah' => 'required|regex:/^[0-9.]+$/'
         ]);
 
@@ -103,6 +103,7 @@ class TarikTabunganController extends Controller
                 'kode' => $kode,
                 'tanggal' => now(),
                 'type' => $request->type,
+                'keterangan' => $request->keterangan,
                 'jumlah' => $jumlah,
                 'saldo_akhir' => $saldoAkhir,
             ]);

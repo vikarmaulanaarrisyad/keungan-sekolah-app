@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CetakTabunganController;
 use App\Http\Controllers\Admin\GuruController;
 use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\RombelController;
@@ -14,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('auth.login');
+});
+Route::get('/cetak', function () {
+    return view('admin.laporan.tabungan_pdf');
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -58,5 +62,9 @@ Route::group(['middleware' => 'auth'], function () {
         // Tarik Tabungan
         Route::get('/transaksi/tarik-tabungan/data', [TarikTabunganController::class, 'data'])->name('tarik.tabungan.data');
         Route::resource('/transaksi/tarik-tabungan', TarikTabunganController::class);
+
+        Route::get('/cetak-tabungan/data', [CetakTabunganController::class, 'data'])->name('cetak-tabungan.data');
+        Route::get('/cetak-tabungan/pdf', [CetakTabunganController::class, 'cetakPDF'])->name('cetak-tabungan.pdf');
+        Route::resource('/cetak-tabungan', CetakTabunganController::class);
     });
 });

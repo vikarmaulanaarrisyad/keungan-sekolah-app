@@ -39,7 +39,6 @@
                         <th>Nama Siswa</th>
                         <th>Kelas</th>
                         <th>Jumlah</th>
-                        <th>Saldo Akhir</th>
                     </x-slot>
                 </x-table>
             </x-card>
@@ -96,11 +95,6 @@
                 },
                 {
                     data: 'jumlah',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'saldo_akhir',
                     orderable: false,
                     searchable: false
                 },

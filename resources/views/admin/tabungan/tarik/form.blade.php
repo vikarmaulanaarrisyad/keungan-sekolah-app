@@ -49,6 +49,14 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="form-group">
+                <label for="keterangan">Keterangan<span class="text-danger">*</span></label>
+                <textarea name="keterangan" id="keterangan" cols="5" rows="5" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
 
 
     <x-slot name="footer">

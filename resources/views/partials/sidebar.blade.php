@@ -173,7 +173,7 @@
                         </a>
                         <ul class="nav nav-treeview" style="display: none;">
                             <li class="nav-item">
-                                <a href="" class="nav-link">
+                                <a href="{{ route('cetak-tabungan.index') }}" class="nav-link">
                                     <i class="far fa-dot-circle nav-icon"></i>
                                     <p>Laporan Tabungan</p>
                                 </a>
